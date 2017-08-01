@@ -1,0 +1,11 @@
+# Mac OS
+.DS_Store
+*/.DS_Store
+
+# Dependency
+node_modules
+
+# Vscode intermediate storage
+.vscode
+
+src/leancloud.config.js
