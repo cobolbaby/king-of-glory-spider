@@ -1,6 +1,7 @@
 const rp = require('request-promise'),
       fs = require('fs'),
       utils = require('./utils'),
+      parser = require('./parser'),
       storage = require('./storage');
 
 // 读取本地数据
@@ -47,7 +48,7 @@ const spider = module.exports = {
      * 获取英雄数据信息
      */
     hero() {
-        for(let i=0; i<1; i++) {
+        for(let i = 0; i < 3; i++) {
             const hero = herolist_data[i];
                   
             // basic: id, name, type, isNew
@@ -77,16 +78,25 @@ const spider = module.exports = {
 
                     attr.push(current_attr);
                 }
-                console.log(attr);
+                // console.log(attr);
 
-                // 技能 skills: 技能图片、名字、冷却值、消耗、主升、副升、技能介绍
+                // 技能 skills: 技能图片、名字、冷却值、消耗、技能介绍
                 console.log('获取技能...');
                 const skills = [];
                 const skillsImg_el = $('#warp .pr-f').eq(3).find('.sp_b .sp_boxCont .sp_bContTop #spCLi li'), // 获取技能图片
                       skillsInfo_el = $('#warp .pr-f').eq(3).find('.sp_b .sp_boxCont .sp_bTopCont #spBT li'), // 获取技能信息
                       skillsExtra_el = $('#warp .pr-f').eq(4).find('.sp_c .sp_boxCont ul li'); // 技能加点
+                // 主升、副升
+                const primary = skillsExtra_el.eq(0).find('.sp_cImg img').attr('src'),
+                      secondary = skillsExtra_el.eq(1).find('.sp_cImg img').attr('src');
+                
+                const pri_id = parser.parseUrlId(primary),
+                      sec_id = parser.parseUrlId(secondary);
 
-                for(let i=0; i<skillsImg_el.length-1; i++) {
+                for(let i = 0; i < skillsImg_el.length; i++) {
+
+                    if(skillsInfo_el.eq(i).find('h3').text() === 'undefined') continue;
+
                     const skillInfo = {
                         name: skillsInfo_el.eq(i).find('h3').text(),
                         img: skillsImg_el.eq(i).find('.sp_bTopImg img').attr('src'),
@@ -94,10 +104,15 @@ const spider = module.exports = {
                         mana: skillsInfo_el.eq(i).find('.skill-p2').text(),
                         desc: skillsInfo_el.eq(i).find('.skill-p3').text()
                     };
+
+                    skillInfo.id = parser.parseUrlId(skillInfo.img);
+                    skillInfo.isPri = (skillInfo.id === pri_id) ? 1 : 0;
+                    skillInfo.isSec = (skillInfo.id === sec_id) ? 1 : 0;
                     
                     skills.push(skillInfo);
 
                     // 召唤师技能 ：技能图片、名字
+
                 }
                 console.log(skills);
 
