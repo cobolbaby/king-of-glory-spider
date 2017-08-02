@@ -7,7 +7,8 @@ const rp = require('request-promise'),
 
 // 读取本地数据
 const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toString()),
-      herolist_data = JSON.parse(fs.readFileSync('./data/herolist.json').toString());
+      herolist_data = JSON.parse(fs.readFileSync('./data/herolist.json').toString()),
+      ming_data = JSON.parse(fs.readFileSync('./data/ming.json').toString());
 
 const spider = module.exports = {
 
@@ -88,8 +89,8 @@ const spider = module.exports = {
                 // 召唤师技能 summoner：技能图片、名字
                 console.log('获取召唤师技能...');
                 const summoner = [];
-                const summoner_el = $('#warp .pr-f').eq(4).find('.sp_c .sp_boxCont ul li').eq(2).find('#skill3');
-                const summoner_id = summoner_el.attr('data-skill').split('|');
+                const summoner_el = $('#warp .pr-f').eq(4).find('.sp_c .sp_boxCont ul li').eq(2).find('#skill3'),
+                      summoner_id = summoner_el.attr('data-skill').split('|');
 
                 for(let i = 0; i < summoner_id.length; i++) {
                     const id = summoner_id[i],
@@ -100,8 +101,27 @@ const spider = module.exports = {
                 // console.log(summoner);
 
                 // 铭文搭配 ming：铭文图片、名字、属性介绍
+                console.log('获取铭文搭配...');
+                const ming = [];
+                const ming_el = $('#warp .pr-f').eq(5).find('.sp_d .sp_boxCont .sugg-u1'),
+                      ming_id = ming_el.attr('data-ming').split('|');
+                
+                for(let i = 0; i < ming_id.length; i++) {
+                    const id = ming_id[i];
 
+                    let mingInfo = ming_data.filter(function(el) {
+                        return el.ming_id === id;
+                    });
+                    mingInfo = mingInfo[0];
 
+                    mingInfo.ming_img = `//game.gtimg.cn/images/yxzj/img201606/mingwen/${id}.png`;
+                    delete mingInfo.ming_type;
+                    delete mingInfo.ming_grade;
+
+                    ming.push(mingInfo);
+                }
+                // console.log(ming);
+                
                 // 出装推荐 equip：装备图片、装备名字
 
             });
