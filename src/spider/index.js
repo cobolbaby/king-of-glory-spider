@@ -109,9 +109,8 @@ const spider = module.exports = {
                 for(let i = 0; i < ming_id.length; i++) {
                     const id = ming_id[i];
 
-                    let mingInfo = ming_data.filter(function(el) {
-                        return el.ming_id === id;
-                    });
+                    let mingInfo = ming_data.filter(el => el.ming_id === id);
+
                     mingInfo = mingInfo[0];
 
                     mingInfo.ming_img = `//game.gtimg.cn/images/yxzj/img201606/mingwen/${id}.png`;
