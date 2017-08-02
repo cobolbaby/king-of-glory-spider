@@ -13,6 +13,6 @@ const spider = require('./spider/index');
 // spider.freeHero();
 
 // 爬取英雄详情信息
-spider.freeHero();
+spider.hero();
 
 })();

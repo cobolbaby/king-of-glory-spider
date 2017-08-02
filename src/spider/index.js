@@ -77,7 +77,7 @@ const spider = module.exports = {
                         desc: skillsInfo_el.eq(i).find('.skill-p3').text()
                     };
 
-                    skillInfo.id = parser.parseUrlId(skillInfo.img);
+                    skillInfo.id = (skillInfo.img).match(/heroimg\/(\S*).png/)[1].split('/')[1];
                     skillInfo.isPri = (skillInfo.id === pri_id) ? 1 : 0;
                     skillInfo.isSec = (skillInfo.id === sec_id) ? 1 : 0;
                     
@@ -87,7 +87,17 @@ const spider = module.exports = {
 
                 // 召唤师技能 summoner：技能图片、名字
                 console.log('获取召唤师技能...');
-                
+                const summoner = [];
+                const summoner_el = $('#warp .pr-f').eq(4).find('.sp_c .sp_boxCont ul li').eq(2).find('#skill3');
+                const summoner_id = summoner_el.attr('data-skill').split('|');
+
+                for(let i = 0; i < summoner_id.length; i++) {
+                    const id = summoner_id[i],
+                          img = `//game.gtimg.cn/images/yxzj/img201606/summoner/${summoner_id[i]}.jpg`;
+                    const summonerInfo = { id, img };
+                    summoner.push(summonerInfo);
+                }
+                // console.log(summoner);
 
                 // 铭文搭配 ming：铭文图片、名字、属性介绍
 

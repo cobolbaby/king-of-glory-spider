@@ -14,7 +14,7 @@ function freeHero() {
         startIndex = str.indexOf('[');
         str = str.substring(startIndex, str.length-2);
         // 转换为对象
-        obj = eval("(" + str + ")");
+        obj = eval(`(${str})`);
         obj = obj[1].sSubContent;
         obj = obj.substring(0, obj.length-1);
         arr = obj.split('|');
