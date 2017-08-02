@@ -1,8 +1,9 @@
 const rp = require('request-promise'),
       fs = require('fs'),
-      utils = require('./utils'),
-      parser = require('./parser'),
-      storage = require('./storage');
+      utils = require('../utils'),
+      parser = require('../parser'),
+      storage = require('../storage'),
+      freeHero = require('./freeHero');
 
 // 读取本地数据
 const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toString()),
@@ -11,44 +12,15 @@ const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toStrin
 const spider = module.exports = {
 
     /**
-     * 爬取周免英雄，并保存到数据库
+     * 周免英雄
      */
-    freeHero() {
-        rp(utils.getRequestOptions(utils.getFreeHeroUrl())).then(function($) {
-            let str, startIndex, obj, arr;
-            // 解析字符串
-            str = $('body').text(); 
-            startIndex = str.indexOf('[');
-            str = str.substring(startIndex, str.length-2);
-            // 转换为对象
-            obj = eval("(" + str + ")");
-            obj = obj[1].sSubContent;
-            obj = obj.substring(0, obj.length-1);
-            arr = obj.split('|');
-
-            // 初始化leancloud
-            storage.init();
-            storage.query(null, 'Free_hero', function(data) {
-                // 无数据，创建对象
-                if(data.length === 0) {
-                    console.log('保存新对象');
-                    storage.save('Free_hero', {'freehero': arr, 'name': '悟空'});
-                    return;
-                }
-                // 更新数据
-                console.log('更新对象');
-                const id = data[0].id;
-                storage.update(id, 'Free_hero', {'freehero': arr, 'name': '八戒'});
-            });
-            
-        });
-    },
+    freeHero,
 
     /**
      * 获取英雄数据信息
      */
     hero() {
-        for(let i = 0; i < 3; i++) {
+        for(let i = 0; i < 1; i++) {
             const hero = herolist_data[i];
                   
             // basic: id, name, type, isNew
@@ -110,11 +82,12 @@ const spider = module.exports = {
                     skillInfo.isSec = (skillInfo.id === sec_id) ? 1 : 0;
                     
                     skills.push(skillInfo);
-
-                    // 召唤师技能 ：技能图片、名字
-
                 }
-                console.log(skills);
+                // console.log(skills);
+
+                // 召唤师技能 summoner：技能图片、名字
+                console.log('获取召唤师技能...');
+                
 
                 // 铭文搭配 ming：铭文图片、名字、属性介绍
 
