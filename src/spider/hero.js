@@ -14,7 +14,10 @@ const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toStrin
  * 获取英雄数据信息
  */
 function hero() {
-    for(let i = 0; i < 3; i++) {
+    // 初始化leancloud
+    storage.init();
+
+    for(let i = 0; i < 1; i++) {
         const hero = herolist_data[i];
                 
         // basic: id, name, type, isNew
@@ -146,8 +149,16 @@ function hero() {
             }
             // console.log(equip);
             heroData.equip = equip;
+            // console.log(heroData);
 
-            console.log(heroData);
+            /**
+             * 将当前数据保存到leancloud云存储
+             */
+            storage.test(hero_id, heroData);
+
+            // 保存数据
+            // storage.save('Hero', heroData);
+            
         });
 
     }

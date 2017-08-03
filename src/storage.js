@@ -69,9 +69,37 @@ const storage = module.exports = {
         let klass = AV.Object.createWithoutData(className, objectId);
         // 保存更新
         klass.save(data).then(
-            res => { console.log('数据更新成功') }, 
+            function(res) { 
+                console.log('数据更新成功');
+                // 手动更新
+                klass.fetch().then(
+                    res => {},
+                    err => { console.error(err) }
+                )
+            }, 
             err => { console.error(err) }
         );
+    },
+
+    test(hero_id, data) {
+        console.log('查询...');
+        let query = new AV.Query('Hero');
+        query.equalTo('hero_id', hero_id);
+
+        query.find().then(function(res) {
+            if(res.length === 0) {
+                console.log('保存新对象');
+                storage.save('Hero', data);
+                return;
+            }
+            console.log('更新对象');
+            const id = data[0].id;
+            console.log(id);
+            storage.update(id, 'Hero', data);
+
+        }, function(err) {
+            console.log(err);
+        });
     }
 
 }
