@@ -71,11 +71,6 @@ const storage = module.exports = {
         klass.save(data).then(
             function(res) { 
                 console.log('数据更新成功');
-                // 手动更新
-                klass.fetch().then(
-                    res => {},
-                    err => { console.error(err) }
-                )
             }, 
             err => { console.error(err) }
         );
@@ -93,7 +88,7 @@ const storage = module.exports = {
                 return;
             }
             console.log('更新对象');
-            const id = data[0].id;
+            const id = res[0].id;
             console.log(id);
             storage.update(id, 'Hero', data);
 

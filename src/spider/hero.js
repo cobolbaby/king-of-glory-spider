@@ -149,16 +149,12 @@ function hero() {
             }
             // console.log(equip);
             heroData.equip = equip;
-            // console.log(heroData);
-
+            
             /**
              * 将当前数据保存到leancloud云存储
              */
             storage.test(hero_id, heroData);
 
-            // 保存数据
-            // storage.save('Hero', heroData);
-            
         });
 
     }
