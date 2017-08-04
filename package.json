@@ -19,6 +19,7 @@
     "request-promise": "^4.2.1"
   },
   "dependencies": {
-    "leancloud-storage": "^3.0.3"
+    "leancloud-storage": "^3.0.3",
+    "node-schedule": "^1.2.3"
   }
 }
