@@ -1,15 +1,24 @@
 const rp = require('request-promise'),
+      cheerio = require('cheerio'),
+      Iconv = require('iconv').Iconv,
       utils = require('../utils'),
       storage = require('../storage');
+
+const iconv = new Iconv('GBK', 'UTF-8');
 
 /**
  * 爬取周免英雄，并保存到数据库
  */
 function freeHero() {
-    rp(utils.getRequestOptions(utils.getFreeHeroUrl())).then(function($) {
+    rp(utils.getRequestOptions(utils.getFreeHeroUrl(), {
+        transform: body => (cheerio.load(
+            iconv.convert(body).toString()
+        ))
+    }))
+    .then(function($) {
         let str, startIndex, obj, arr;
         // 解析字符串
-        str = $('body').text(); 
+        str = $('body').text();
         startIndex = str.indexOf('[');
         str = str.substring(startIndex, str.length-2);
         // 转换为对象

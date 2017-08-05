@@ -1,8 +1,12 @@
 const rp = require('request-promise'),
       fs = require('fs'),
+      cheerio = require('cheerio'),
+      Iconv = require('iconv').Iconv,
       utils = require('../utils'),
       parser = require('../parser'),
       storage = require('../storage');
+
+const iconv = new Iconv('GBK', 'UTF-8');
 
 // 读取本地数据
 const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toString()),
@@ -34,7 +38,12 @@ function hero() {
         
         const url = utils.getHeroDetail(hero_id);
 
-        rp(utils.getRequestOptions(url)).then(function($) {
+        rp(utils.getRequestOptions(url, {
+            transform: body => (cheerio.load(
+                iconv.convert(body).toString()
+            ))
+        }))
+        .then(function($) {
             
             // 属性 attr: hp生存能力, atk攻击伤害, effect技能效果, hard上手难度
             console.log('获取属性...');
@@ -153,7 +162,10 @@ function hero() {
             /**
              * 将当前数据保存到leancloud云存储
              */
-            storage.test(hero_id, heroData);
+            storage.test({
+                 key: 'hero_id',
+                 val: hero_id
+            }, 'Hero', heroData);
 
         });
 

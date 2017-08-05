@@ -1,21 +1,15 @@
-const cheerio = require('cheerio'),
-      Iconv = require('iconv').Iconv,
-      iconv = new Iconv('GBK', 'UTF-8');
-
 module.exports = {
 
     /**
      * 获取request配置数据
      * @param {String} url 
      */
-    getRequestOptions(url) {
-        return {
+    getRequestOptions(url, opts) {
+        const def = {
             url,
-            encoding: null,
-            transform: body => (cheerio.load(
-                iconv.convert(body).toString()
-            ))
-        }
+            encoding: null
+        };
+        return opts ? Object.assign(def, opts) : def;
     },
 
     /**
@@ -31,6 +25,10 @@ module.exports = {
      */
     getHeroDetail(heroid) {
         return 'http://pvp.qq.com/m/m201606/herodetail/' + heroid + '.shtml';
+    },
+
+    getEquipUrl() {
+        return 'http://pvp.qq.com/web201605/js/item.json';
     }
 
 }

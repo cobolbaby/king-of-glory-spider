@@ -1,5 +1,6 @@
 const freeHero = require('./freeHero'),
-      hero = require('./hero');
+      hero = require('./hero'),
+      equip = require('./equip');
 
 const spider = module.exports = {
 
@@ -11,6 +12,11 @@ const spider = module.exports = {
     /**
      * 获取英雄数据信息
      */
-    hero
+    hero,
+
+    /**
+     * 获取局内装备
+     */
+    equip
     
 }

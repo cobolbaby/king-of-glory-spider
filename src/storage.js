@@ -76,10 +76,10 @@ const storage = module.exports = {
         );
     },
 
-    test(hero_id, data) {
+    test(pk, className, data) {
         console.log('查询...');
-        let query = new AV.Query('Hero');
-        query.equalTo('hero_id', hero_id);
+        let query = new AV.Query(className);
+        query.equalTo(pk.key, pk.val);
 
         query.find().then(function(res) {
             if(res.length === 0) {
@@ -90,7 +90,7 @@ const storage = module.exports = {
             console.log('更新对象');
             const id = res[0].id;
             console.log(id);
-            storage.update(id, 'Hero', data);
+            storage.update(id, className, data);
 
         }, function(err) {
             console.log(err);
