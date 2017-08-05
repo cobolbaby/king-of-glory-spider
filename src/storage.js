@@ -76,7 +76,14 @@ const storage = module.exports = {
         );
     },
 
-    test(pk, className, data) {
+    /**
+     * 根据查询结果对数据进行保存或更新
+     * 
+     * @param {Object} pk 
+     * @param {String} className 
+     * @param {Object} data 
+     */
+    saveOrUpdate(pk, className, data) {
         console.log('查询...');
         let query = new AV.Query(className);
         query.equalTo(pk.key, pk.val);
@@ -84,7 +91,7 @@ const storage = module.exports = {
         query.find().then(function(res) {
             if(res.length === 0) {
                 console.log('保存新对象');
-                storage.save('Hero', data);
+                storage.save(className, data);
                 return;
             }
             console.log('更新对象');

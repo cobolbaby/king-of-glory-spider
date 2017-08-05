@@ -29,18 +29,19 @@ function freeHero() {
 
         // 初始化leancloud
         storage.init();
-        storage.query(null, 'Free_hero', function(data) {
-            // 无数据，创建对象
-            if(data.length === 0) {
-                console.log('保存新对象');
-                storage.save('Free_hero', {'freehero': arr});
-                return;
-            }
-            // 更新数据
-            console.log('更新对象');
-            const id = data[0].id;
-            storage.update(id, 'Free_hero', {'freehero': arr});
-        });
+        // storage.query(null, 'Free_hero', function(data) {
+        //     // 无数据，创建对象
+        //     if(data.length === 0) {
+        //         console.log('保存新对象');
+        //         storage.save('Free_hero', {'freehero': arr});
+        //         return;
+        //     }
+        //     // 更新数据
+        //     console.log('更新对象');
+        //     const id = data[0].id;
+        //     storage.update(id, 'Free_hero', {'freehero': arr});
+        // });
+        storage.saveOrUpdate({key: 'freehero', val: arr}, 'Free_hero', {'freehero': arr});
         
     });
 }

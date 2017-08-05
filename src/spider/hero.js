@@ -162,7 +162,7 @@ function hero() {
             /**
              * 将当前数据保存到leancloud云存储
              */
-            storage.test({
+            storage.saveOrUpdate({
                  key: 'hero_id',
                  val: hero_id
             }, 'Hero', heroData);
