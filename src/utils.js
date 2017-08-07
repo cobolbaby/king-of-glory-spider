@@ -24,7 +24,7 @@ module.exports = {
      * @param {Number} heroid
      */
     getHeroDetail(heroid) {
-        return 'http://pvp.qq.com/m/m201606/herodetail/' + heroid + '.shtml';
+        return 'http://pvp.qq.com/m/m201706/herodetail/' + heroid + '.html';
     },
 
     getEquipUrl() {
