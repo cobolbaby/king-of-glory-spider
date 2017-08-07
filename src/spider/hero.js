@@ -18,17 +18,20 @@ const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toStrin
  * 获取英雄数据信息
  */
 function hero() {
+
     // 初始化leancloud
     storage.init();
+
+    const heroes = [];
 
     for(let i = 0; i < 1; i++) {
         const hero = herolist_data[i];
                 
         // basic: id, name, type, isNew
         const hero_id = hero.ename,
-                hero_name = hero.cname,
-                hero_type = hero.hero_type,
-                isNew = hero.new_type;
+              hero_name = hero.cname,
+              hero_type = hero.hero_type,
+              isNew = hero.new_type;
 
         // 封面图片 和 头像
         const hero_cover = `//game.gtimg.cn/images/yxzj/img201606/heroimg/${hero_id}/${hero_id}-mobileskin-1.jpg`,
@@ -158,7 +161,8 @@ function hero() {
             }
             // console.log(equip);
             heroData.equip = equip;
-            
+
+            heroes.push(heroData);
             /**
              * 将当前数据保存到leancloud云存储
              */
@@ -168,8 +172,8 @@ function hero() {
             }, 'Hero', heroData);
 
         });
-
     }
+
 }
 
 module.exports = hero;
