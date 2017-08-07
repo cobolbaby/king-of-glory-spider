@@ -11,140 +11,186 @@ const iconv = new Iconv('GBK', 'UTF-8');
 // 读取本地数据
 const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toString()),
       herolist_data = JSON.parse(fs.readFileSync('./data/herolist.json').toString()),
+      summoner_data = JSON.parse(fs.readFileSync('./data/summoner.json').toString()),
       ming_data = JSON.parse(fs.readFileSync('./data/ming.json').toString()),
       equip_data = JSON.parse(fs.readFileSync('./data/item.json').toString());
 
-function attr() {
-    // 属性 attr: hp生存能力, atk攻击伤害, effect技能效果, hard上手难度
+/**
+ * 英雄属性
+ * @param {*} $ 
+ */
+function attr($) {
     console.log('获取属性...');
+
     const attr = [];
-    const attr_el = $('#warp .sp_baTop .sp_banner .hero-info .hero-info-ul .hero-info-li');
+    const el = $('.wrap .header-hero .hero-attribute .hero-cover .cover-list li');
+    const attr_name = ['生存能力', '攻击伤害', '技能效果', '上手难度'];
+    
+    for(let i = 0; i < el.length; i++) {
+        const name  = attr_name[i],
+              value = el.eq(i).find('span').attr('class')
+                      .split(/\s+/)[2]
+                      .split('-')[2];
+        
+        const current_obj = {
+            name, value
+        };
 
-    for(let i=0; i<attr_el.length; i++) {
-        const current_attr = {};
-        const desc = attr_el.eq(i).find('.hero-info-text').text();
-
-        let value = attr_el.eq(i).find('.hero-info-bar .ibar').attr('style');
-        value = value.match(/width:(\S*)%/)[1];
-
-        current_attr.desc = desc;
-        current_attr.value = value;
-
-        attr.push(current_attr);
+        attr.push(current_obj);
     }
-    // console.log(attr);
+
     return attr;
 }
 
-function skills() {
-    // 技能 skills: 技能图片、名字、冷却值、消耗、技能介绍
-    // console.log('获取技能...');
+/**
+ * 技能
+ * @param {*} $ 
+ */
+function skills($) {
+    console.log('获取技能...');
+
     const skills = [];
-    const skillsImg_el = $('#warp .pr-f').eq(3).find('.sp_b .sp_boxCont .sp_bContTop #spCLi li'), // 获取技能图片
-            skillsInfo_el = $('#warp .pr-f').eq(3).find('.sp_b .sp_boxCont .sp_bTopCont #spBT li'), // 获取技能信息
-            skillsExtra_el = $('#warp .pr-f').eq(4).find('.sp_c .sp_boxCont ul li'); // 技能加点
-    // 主升、副升
-    const primary = skillsExtra_el.eq(0).find('.sp_cImg img').attr('src'),
-            secondary = skillsExtra_el.eq(1).find('.sp_cImg img').attr('src');
-    
-    const pri_id = parser.parseUrlId(primary),
-            sec_id = parser.parseUrlId(secondary);
+    const el = $('.wrap .content-hero .content-tab .content-list').eq(1).find('.panel').eq(0).find('.autom'),
+          img_el = el.find('.plus-tab li'),
+          content_el = el.find('.plus-content li');
 
-    for(let i = 0; i < skillsImg_el.length; i++) {
+    // 主、副技能
+    const ps_el = $('.wrap .content-hero .content-tab .content-list').eq(1).find('.panel').eq(1).find('.autom .plus-osal'),
+          pri_id = ps_el.find('.sk1 .osal-p2').attr('data-upskill'),
+          sec_id = ps_el.find('.sk2 .osal-p2').attr('data-upskill');
 
-        if(skillsInfo_el.eq(i).find('h3').text() === 'undefined') continue;
+    for(let i = 0; i < img_el.length; i++) {
+        if(content_el.eq(i).find('.plus-box .plus-name').text() === 'undefined') continue;
 
-        const skillInfo = {
-            name: skillsInfo_el.eq(i).find('h3').text(),
-            img: skillsImg_el.eq(i).find('.sp_bTopImg img').attr('src'),
-            cd: skillsInfo_el.eq(i).find('.skill-p1').text(),
-            mana: skillsInfo_el.eq(i).find('.skill-p2').text(),
-            desc: skillsInfo_el.eq(i).find('.skill-p3').text()
+        const id = content_el.eq(i).find('.plus-box .plus-name').attr('data-skillid'),
+              name = content_el.eq(i).find('.plus-box .plus-name').text(),
+              img = img_el.eq(i).find('img').attr('src'),
+              value = content_el.eq(i).find('.plus-box .plus-value').text(),
+              des = content_el.eq(i).find('.plus-int').text(),
+              tips = content_el.eq(i).find('.prompt').text();
+
+        const current_obj = {
+            id, name, img, value, des, tips
         };
 
-        skillInfo.id = (skillInfo.img).match(/heroimg\/(\S*).png/)[1].split('/')[1];
-        skillInfo.isPri = (skillInfo.id === pri_id) ? 1 : 0;
-        skillInfo.isSec = (skillInfo.id === sec_id) ? 1 : 0;
-        
-        skills.push(skillInfo);
+        current_obj.isPri = (id == pri_id) ? 1 : 0;
+        current_obj.isSec = (id == sec_id) ? 1 : 0;
+
+        skills.push(current_obj);
     }
-    // console.log(skills);
+
     return skills;
 }
 
-function summoner() {
-    // 召唤师技能 summoner：技能图片、名字
-    // console.log('获取召唤师技能...');
-    const summoner = [];
-    const summoner_el = $('#warp .pr-f').eq(4).find('.sp_c .sp_boxCont ul li').eq(2).find('#skill3'),
-            summoner_id = summoner_el.attr('data-skill').split('|');
+/**
+ * 召唤师技能
+ * @param {*} $ 
+ */
+function summoner($) {
+    console.log('获取召唤师技能...');
 
-    for(let i = 0; i < summoner_id.length; i++) {
-        const id = summoner_id[i],
-                img = `//game.gtimg.cn/images/yxzj/img201606/summoner/${summoner_id[i]}.jpg`;
-        const summonerInfo = { id, img };
-        summoner.push(summonerInfo);
+    const summoner = [];
+    const summoner_str = $('.wrap .content-hero .content-tab .content-list').eq(1).find('.panel').eq(1).find('.autom .plus-osal .osal-suner #skill3').attr('data-skill');
+    const summoner_id_arr = summoner_str.split('|');
+
+    for(let i in summoner_id_arr) {
+        const id = summoner_id_arr[i],
+              data = summoner_data.filter(el => el.summoner_id == id)[0];
+        
+        const current_obj = {
+            id,
+            name: data.summoner_name,
+            img: `//game.gtimg.cn/images/yxzj/img201606/summoner/${id}.jpg`
+        }
+
+        summoner.push(current_obj);
     }
-    // console.log(summoner);
+
     return summoner;
 }
 
-function ming() {
-    // 铭文搭配 ming：铭文图片、名字、属性介绍
-    // console.log('获取铭文搭配...');
+/**
+ * 铭文搭配
+ */
+function ming($) {
+    console.log('获取铭文搭配...');
+
     const ming = [];
-    const ming_el = $('#warp .pr-f').eq(5).find('.sp_d .sp_boxCont .sugg-u1'),
-            ming_id = ming_el.attr('data-ming').split('|');
-    
-    for(let i = 0; i < ming_id.length; i++) {
-        const id = ming_id[i];
+    const ming_str = $('.wrap .content-hero .content-tab .content-list').eq(2).find('.panel').eq(1).find('.autom .rune-list').attr('data-ming');
+    const ming_id_arr = ming_str.split('|');
 
-        let mingInfo = ming_data.filter(el => el.ming_id == id);
-        mingInfo = mingInfo[0];
+    for(let i in ming_id_arr) {
+        const id = ming_id_arr[i], 
+              data = ming_data.filter(el => el.ming_id == id)[0];
 
-        mingInfo.ming_img = `//game.gtimg.cn/images/yxzj/img201606/mingwen/${id}.png`;
-        delete mingInfo.ming_type;
-        delete mingInfo.ming_grade;
+        const current_obj = {
+            id,
+            name: data.ming_name,
+            img: `//game.gtimg.cn/images/yxzj/img201606/mingwen/${id}.png`,
+            des: data.ming_des
+        }
 
-        ming.push(mingInfo);
+        ming.push(current_obj);
     }
-    // console.log(ming);
+
     return ming;
 }
 
+/**
+ * 出装推荐
+ * @param {*} $ 
+ */
 function equip($) {
-    // 出装推荐 equip：装备图片、装备名字
-    // console.log('获取出装推荐...');
-    // const equip = [];
-    // const equip_el = $('.wrapper .zkcontent .zk-con-box .zk-con4 .equip .equip-bd .equip-info').eq(1).find('.equip-list');
-        //   equip_id = equip_el.attr('data-item').split('|');
-    // console.log(equip_el.attr('data-item'));
-    // for(let i = 0; i < equip_id.length; i++) {
-    //     const id = equip_id[i];
+    console.log('获取出装推荐...');
 
-    //     let equipInfo = equip_data.filter(el => el.item_id == id);
-    //     equipInfo = equipInfo[0];
-        // equipInfo.equip_img = `//game.gtimg.cn/images/yxzj/img201606/itemimg/${id}.jpg`;
-        // delete equipInfo.item_type;
-        // delete equipInfo.price;
-        // delete equipInfo.total_price;
-        // delete equipInfo.des1;
-        // delete equipInfo.des2;
-        // console.log(equipInfo);
-
-        // equip.push(equipInfo);
-    // }
-    // console.log(equip);
-    // return equip;
-
-    // { '顺风出装': [{}, {}, ...],
-    //   '逆风出装': [{}, {}, ...]
-    // }
+    const leading_data = [],
+          losing_data = [];
+    const el = $('.wrap .content-hero .content-tab .content-list').eq(2).find('.panel').eq(0).find('.autom .skills-build'),
+          leading_str = el.eq(0).find('.build-list').attr('data-item'), // 顺风出装
+          losing_str = el.eq(1).find('.build-list').attr('data-item'), // 逆风出装
+          leading_tips = el.eq(0).find('.prompt').text(), // 出装小提示
+          losing_tips = el.eq(1).find('.prompt').text();
     
-    const el = $('.wrap .content-hero .content-tab .content-list').eq(2).find('.panel').eq(0).find('.autom'),
-          leading_str = el.find('.skills-build').eq(0).find('.build-list').attr('data-item'), // 顺风出装
-          losing_str = el.find('.skills-build').eq(1).find('.build-list').attr('data-item'); // 逆风出装
-    
+    const leading_id_arr = leading_str.split('|'),
+          losing_id_arr = losing_str.split('|');
+
+    for(let i in leading_id_arr) {
+        const id = leading_id_arr[i],
+              data = equip_data.filter(el => el.item_id == id)[0];
+
+        const current_obj = {
+            id,
+            name: data.item_name,
+            img: `//game.gtimg.cn/images/yxzj/img201606/itemimg/${id}.jpg`
+        };
+
+        leading_data.push(current_obj);
+    }
+
+    for(let i in losing_id_arr) {
+        const id = losing_id_arr[i],
+              data = equip_data.filter(el => el.item_id == id)[0];
+
+        const current_obj = {
+            id,
+            name: data.item_name,
+            img: `//game.gtimg.cn/images/yxzj/img201606/itemimg/${id}.jpg`
+        };
+
+        losing_data.push(current_obj);
+    }
+
+    // 组装数据
+    return {
+        '顺风出装': {
+            data: leading_data,
+            tips: leading_tips
+        },
+        '逆风出装': {
+            data: losing_data,
+            tips: losing_tips
+        }
+    } 
     
 }
 
@@ -173,46 +219,21 @@ function scraper(index, length) {
             transform: body => cheerio.load(body)
         }))
         .then(function($) {
-            // heroData.attr = attr();
-            // heroData.skills = skills();
-            // heroData.summoner = summoner();
-            // heroData.ming = ming();
+            heroData.attr = attr($);
+            heroData.skills = skills($);
+            heroData.summoner = summoner($);
+            heroData.ming = ming($);
             heroData.equip = equip($);
+            
+            console.log(heroData);
+
+            if( (index+1) == length ) {
+                // 结束循环操作
+            }
+
+            scraper(++index, length);
         });
 
-        // rp({
-        //     url,
-        //     transform: body => cheerio.load(body)
-        // })
-        // .then(function($) {
-
-            // heroData.attr = attr();
-
-            // heroData.skills = skills();
-            
-            // heroData.summoner = summoner();
-
-            // heroData.ming = ming();
-            
-            // heroData.equip = equip($);
-
-            // heroes.push(heroData);
-            /**
-             * 将当前数据保存到leancloud云存储
-             */
-            // storage.saveOrUpdate({
-            //      key: 'hero_id',
-            //      val: hero_id
-            // }, 'Hero', heroData);
-            // console.log(index+1, length-1);
-        //     if( (index+1) == length ) {
-        //         // console.log(heroes);
-        //         // storage.saveAll(heroes);
-        //     }
-
-        //     scraper(++index, length);
-
-        // });
     }
 }
 
@@ -222,9 +243,8 @@ function scraper(index, length) {
 function hero() {
     // 初始化leancloud
     // storage.init();
-
-    scraper(0, 1);
     
+    scraper(0, 1);
 
 }
 
