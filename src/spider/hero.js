@@ -14,18 +14,12 @@ const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toStrin
       ming_data = JSON.parse(fs.readFileSync('./data/ming.json').toString()),
       equip_data = JSON.parse(fs.readFileSync('./data/item.json').toString());
 
-/**
- * 获取英雄数据信息
- */
-function hero() {
+const heroes = [];
 
-    // 初始化leancloud
-    storage.init();
+function processNext(index, length) {
 
-    const heroes = [];
-
-    for(let i = 0; i < 1; i++) {
-        const hero = herolist_data[i];
+    if(index < length) {
+        const hero = herolist_data[index];
                 
         // basic: id, name, type, isNew
         const hero_id = hero.ename,
@@ -35,7 +29,7 @@ function hero() {
 
         // 封面图片 和 头像
         const hero_cover = `//game.gtimg.cn/images/yxzj/img201606/heroimg/${hero_id}/${hero_id}-mobileskin-1.jpg`,
-                hero_avatar = `//game.gtimg.cn/images/yxzj/img201606/heroimg/${hero_id}/${hero_id}.jpg`;
+              hero_avatar = `//game.gtimg.cn/images/yxzj/img201606/heroimg/${hero_id}/${hero_id}.jpg`;
 
         const heroData = {hero_id, hero_name, hero_avatar, hero_type, hero_cover, isNew};
         
@@ -47,9 +41,9 @@ function hero() {
             ))
         }))
         .then(function($) {
-            
+
             // 属性 attr: hp生存能力, atk攻击伤害, effect技能效果, hard上手难度
-            console.log('获取属性...');
+            // console.log('获取属性...');
             const attr = [];
             const attr_el = $('#warp .sp_baTop .sp_banner .hero-info .hero-info-ul .hero-info-li');
 
@@ -69,7 +63,7 @@ function hero() {
             heroData.attr = attr;
 
             // 技能 skills: 技能图片、名字、冷却值、消耗、技能介绍
-            console.log('获取技能...');
+            // console.log('获取技能...');
             const skills = [];
             const skillsImg_el = $('#warp .pr-f').eq(3).find('.sp_b .sp_boxCont .sp_bContTop #spCLi li'), // 获取技能图片
                     skillsInfo_el = $('#warp .pr-f').eq(3).find('.sp_b .sp_boxCont .sp_bTopCont #spBT li'), // 获取技能信息
@@ -103,7 +97,7 @@ function hero() {
             heroData.skills = skills;
 
             // 召唤师技能 summoner：技能图片、名字
-            console.log('获取召唤师技能...');
+            // console.log('获取召唤师技能...');
             const summoner = [];
             const summoner_el = $('#warp .pr-f').eq(4).find('.sp_c .sp_boxCont ul li').eq(2).find('#skill3'),
                     summoner_id = summoner_el.attr('data-skill').split('|');
@@ -118,7 +112,7 @@ function hero() {
             heroData.summoner = summoner;
 
             // 铭文搭配 ming：铭文图片、名字、属性介绍
-            console.log('获取铭文搭配...');
+            // console.log('获取铭文搭配...');
             const ming = [];
             const ming_el = $('#warp .pr-f').eq(5).find('.sp_d .sp_boxCont .sugg-u1'),
                     ming_id = ming_el.attr('data-ming').split('|');
@@ -139,7 +133,7 @@ function hero() {
             heroData.ming = ming;
             
             // 出装推荐 equip：装备图片、装备名字
-            console.log('获取出装推荐...');
+            // console.log('获取出装推荐...');
             const equip = [];
             const equip_el = $('#warp .pr-f').eq(6).find('.sp_e .sp_boxCont .sp_eCont').eq(2).find('.sp_eR ul'),
                     equip_id = equip_el.attr('data-item').split('|');
@@ -166,13 +160,27 @@ function hero() {
             /**
              * 将当前数据保存到leancloud云存储
              */
-            storage.saveOrUpdate({
-                 key: 'hero_id',
-                 val: hero_id
-            }, 'Hero', heroData);
+            // storage.saveOrUpdate({
+            //      key: 'hero_id',
+            //      val: hero_id
+            // }, 'Hero', heroData);
+            // console.log(index+1, length-1);
+            if( (index+1) == length ) {
+                console.log(heroes);
+            }
+
+            processNext(++index, length);
 
         });
     }
+}
+
+/**
+ * 获取英雄数据信息
+ */
+function hero() {
+    
+    processNext(0, 2);
 
 }
 
