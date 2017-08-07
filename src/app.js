@@ -17,8 +17,8 @@ const spider = require('./spider/index');
 // });
 
 // 爬取英雄详情信息
-spider.hero(); 
+// spider.hero(); 
 
-// spider.equip();
+spider.equip();
 
 })();
