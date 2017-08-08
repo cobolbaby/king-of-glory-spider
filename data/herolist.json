@@ -1,4 +1,11 @@
 [{
+	"ename": 196,
+	"cname": "百里守约",
+	"title": "静谧之眼",
+	"hero_type": 5,
+	"new_type": 1,
+	"skin_name": "静谧之眼|绝影神枪"
+}, {
 	"ename": 193,
 	"cname": "铠",
 	"title": "破灭刃锋",
@@ -16,7 +23,6 @@
 	"ename": 182,
 	"cname": "干将莫邪",
 	"title": "淬命双剑",
-	"pay_type": 10,
 	"hero_type": 2,
 	"new_type": 0,
 	"skin_name": "淬命双剑|第七人偶"
@@ -52,7 +58,6 @@
 	"ename": 180,
 	"cname": "哪吒",
 	"title": "桀骜炎枪",
-	"pay_type": 10,
 	"hero_type": 1,
 	"new_type": 0,
 	"skin_name": "桀骜炎枪|三太子"
@@ -95,6 +100,7 @@
 	"ename": 183,
 	"cname": "雅典娜",
 	"title": "圣域余晖",
+	"pay_type": 10,
 	"hero_type": 1,
 	"new_type": 0,
 	"skin_name": "圣域余晖|战争女神"
@@ -123,6 +129,7 @@
 	"ename": 174,
 	"cname": "虞姬",
 	"title": "森之风灵",
+	"pay_type": 10,
 	"hero_type": 5,
 	"new_type": 0,
 	"skin_name": "森之风灵|加勒比小姐|霸王别姬|凯尔特女王"
@@ -223,6 +230,7 @@
 	"ename": 141,
 	"cname": "貂蝉",
 	"title": "绝世舞姬",
+	"pay_type": 10,
 	"hero_type": 2,
 	"new_type": 0,
 	"skin_name": "绝世舞姬|异域舞娘|圣诞恋歌|逐梦之音"
@@ -239,7 +247,7 @@
 	"title": "恋之微风",
 	"hero_type": 2,
 	"new_type": 0,
-	"skin_name": "恋之微风|万圣前夜|天鹅之梦|纯白花嫁"
+	"skin_name": "恋之微风|万圣前夜|天鹅之梦|纯白花嫁|缤纷独角兽"
 }, {
 	"ename": 127,
 	"cname": "甄姬",
@@ -308,7 +316,6 @@
 	"ename": 144,
 	"cname": "程咬金",
 	"title": "热烈之斧",
-	"pay_type": 10,
 	"hero_type": 3,
 	"new_type": 0,
 	"skin_name": "热烈之斧|爱与正义|星际陆战队|华尔街大亨"
@@ -316,6 +323,7 @@
 	"ename": 119,
 	"cname": "扁鹊",
 	"title": "善恶怪医",
+	"pay_type": 10,
 	"hero_type": 2,
 	"new_type": 0,
 	"skin_name": "善恶怪医|红莲之瞳|化身博士|炼金王"
@@ -331,6 +339,7 @@
 	"ename": 116,
 	"cname": "阿轲",
 	"title": "信念之刃",
+	"pay_type": 10,
 	"hero_type": 4,
 	"new_type": 0,
 	"skin_name": "信念之刃|爱心护理|暗夜猫娘|致命风华"
@@ -345,7 +354,6 @@
 	"ename": 124,
 	"cname": "周瑜",
 	"title": "铁血都督",
-	"pay_type": 10,
 	"hero_type": 2,
 	"new_type": 0,
 	"skin_name": "铁血都督|海军大将|真爱至上"
@@ -353,6 +361,7 @@
 	"ename": 139,
 	"cname": "老夫子",
 	"title": "万古长明",
+	"pay_type": 10,
 	"hero_type": 1,
 	"new_type": 0,
 	"skin_name": "万古长明|潮流仙人|圣诞老人"
@@ -374,7 +383,6 @@
 	"ename": 113,
 	"cname": "庄周",
 	"title": "逍遥梦幻",
-	"pay_type": 10,
 	"hero_type": 3,
 	"new_type": 0,
 	"skin_name": "逍遥幻梦|鲤鱼之梦|蜃楼王"
@@ -410,6 +418,7 @@
 	"ename": 105,
 	"cname": "廉颇",
 	"title": "正义爆轰",
+	"pay_type": 10,
 	"hero_type": 3,
 	"new_type": 0,
 	"skin_name": "正义爆轰|地狱岩魂"
@@ -466,7 +475,6 @@
 	"ename": 173,
 	"cname": "李元芳",
 	"title": "王都密探",
-	"pay_type": 10,
 	"hero_type": 5,
 	"new_type": 0,
 	"skin_name": "王都密探|特种部队|黑猫爱糖果"
@@ -474,7 +482,6 @@
 	"ename": 149,
 	"cname": "刘邦",
 	"title": "双面君主",
-	"pay_type": 10,
 	"hero_type": 3,
 	"new_type": 0,
 	"skin_name": "双面君主|圣殿之光|德古拉伯爵"

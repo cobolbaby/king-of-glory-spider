@@ -20,13 +20,11 @@ const herotype_data = JSON.parse(fs.readFileSync('./data/herotype.json').toStrin
  * @param {*} $ 
  */
 function attr($) {
-    console.log('获取属性...');
-
     const attr = [];
     const el = $('.wrap .header-hero .hero-attribute .hero-cover .cover-list li');
     const attr_name = ['生存能力', '攻击伤害', '技能效果', '上手难度'];
     
-    for(let i = 0; i < el.length; i++) {
+    for (let i = 0; i < el.length; i++) {
         const name  = attr_name[i],
               value = el.eq(i).find('span').attr('class')
                       .split(/\s+/)[2]
@@ -47,8 +45,6 @@ function attr($) {
  * @param {*} $ 
  */
 function skills($) {
-    console.log('获取技能...');
-
     const skills = [];
     const el = $('.wrap .content-hero .content-tab .content-list').eq(1).find('.panel').eq(0).find('.autom'),
           img_el = el.find('.plus-tab li'),
@@ -59,7 +55,7 @@ function skills($) {
           pri_id = ps_el.find('.sk1 .osal-p2').attr('data-upskill'),
           sec_id = ps_el.find('.sk2 .osal-p2').attr('data-upskill');
 
-    for(let i = 0; i < img_el.length; i++) {
+    for (let i = 0; i < img_el.length; i++) {
         if(content_el.eq(i).find('.plus-box .plus-name').text() === 'undefined') continue;
 
         const id = content_el.eq(i).find('.plus-box .plus-name').attr('data-skillid'),
@@ -87,13 +83,11 @@ function skills($) {
  * @param {*} $ 
  */
 function summoner($) {
-    console.log('获取召唤师技能...');
-
     const summoner = [];
     const summoner_str = $('.wrap .content-hero .content-tab .content-list').eq(1).find('.panel').eq(1).find('.autom .plus-osal .osal-suner #skill3').attr('data-skill');
     const summoner_id_arr = summoner_str.split('|');
 
-    for(let i in summoner_id_arr) {
+    for (let i in summoner_id_arr) {
         const id = summoner_id_arr[i],
               data = summoner_data.filter(el => el.summoner_id == id)[0];
         
@@ -113,13 +107,11 @@ function summoner($) {
  * 铭文搭配
  */
 function ming($) {
-    console.log('获取铭文搭配...');
-
     const ming = [];
     const ming_str = $('.wrap .content-hero .content-tab .content-list').eq(2).find('.panel').eq(1).find('.autom .rune-list').attr('data-ming');
     const ming_id_arr = ming_str.split('|');
 
-    for(let i in ming_id_arr) {
+    for (let i in ming_id_arr) {
         const id = ming_id_arr[i], 
               data = ming_data.filter(el => el.ming_id == id)[0];
 
@@ -141,8 +133,6 @@ function ming($) {
  * @param {*} $ 
  */
 function equip($) {
-    console.log('获取出装推荐...');
-
     const leading_data = [],
           losing_data = [];
     const el = $('.wrap .content-hero .content-tab .content-list').eq(2).find('.panel').eq(0).find('.autom .skills-build'),
@@ -154,10 +144,12 @@ function equip($) {
     const leading_id_arr = leading_str.split('|'),
           losing_id_arr = losing_str.split('|');
 
-    for(let i in leading_id_arr) {
+    for (let i in leading_id_arr) {
         const id = leading_id_arr[i],
               data = equip_data.filter(el => el.item_id == id)[0];
-
+        
+        if (typeof(data) == 'undefined') continue;
+        
         const current_obj = {
             id,
             name: data.item_name,
@@ -167,9 +159,11 @@ function equip($) {
         leading_data.push(current_obj);
     }
 
-    for(let i in losing_id_arr) {
+    for (let i in losing_id_arr) {
         const id = losing_id_arr[i],
               data = equip_data.filter(el => el.item_id == id)[0];
+
+        if (typeof(data) == 'undefined') continue;
 
         const current_obj = {
             id,
@@ -180,7 +174,6 @@ function equip($) {
         losing_data.push(current_obj);
     }
 
-    // 组装数据
     return {
         '顺风出装': {
             data: leading_data,
@@ -191,17 +184,21 @@ function equip($) {
             tips: losing_tips
         }
     } 
-    
 }
 
 const heroes = [];
 
+/**
+ * 整合爬虫英雄数据
+ * @param {Number} index 起始下标
+ * @param {Number} length 最后长度
+ */
 function scraper(index, length) {
 
-    if(index < length) {
+    if (index < length && length < herolist_data.length) {
         const hero = herolist_data[index];
-        
-        // basic: id, name, type, isNew
+
+        // 基本资料
         const hero_id = hero.ename,
               hero_name = hero.cname,
               hero_type = hero.hero_type,
@@ -225,11 +222,11 @@ function scraper(index, length) {
             heroData.ming = ming($);
             heroData.equip = equip($);
             
-            console.log(heroData);
-
-            if( (index+1) == length ) {
-                // 结束循环操作
-            }
+            // heroes.push(heroData);
+            // if( (index+1) == length ) {
+                // 结束循环操作，批量上传
+            // }
+            storage.saveOrUpdate({ key: 'hero_id', val: hero_id }, 'Hero', heroData);
 
             scraper(++index, length);
         });
@@ -242,10 +239,9 @@ function scraper(index, length) {
  */
 function hero() {
     // 初始化leancloud
-    // storage.init();
-    
-    scraper(0, 1);
-
+    storage.init();
+    // 上传 fix 批量上传
+    scraper(40, 60);
 }
 
 module.exports = hero;

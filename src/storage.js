@@ -104,4 +104,8 @@ const storage = module.exports = {
         });
     }
 
+    /**
+     * fix 批量上传
+     */
+
 }
