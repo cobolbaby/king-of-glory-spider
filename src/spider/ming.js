@@ -1,15 +1,12 @@
 const rp = require('request-promise'),
       utils = require('../utils'),
-      storage = require('../storage');
+      storage = require('../storage'),
+      JsonData = require('./jsonData');
+
+const Ming = new JsonData(utils.getMingUrl(), 0, 2, 'ming');
 
 function ming() {
-    rp({
-        url: utils.getMingUrl(),
-        json: true
-    })
-    .then(function(res) {
-        
-    });
+    Ming.scraper();
 }
 
 module.exports = ming;
