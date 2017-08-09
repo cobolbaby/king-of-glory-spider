@@ -29,6 +29,10 @@ module.exports = {
 
     getEquipUrl() {
         return 'http://pvp.qq.com/web201605/js/item.json';
+    },
+
+    getMingUrl() {
+        return 'http://pvp.qq.com/web201605/js/ming.json';
     }
 
 }

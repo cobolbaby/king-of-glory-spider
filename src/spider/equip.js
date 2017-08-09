@@ -1,9 +1,6 @@
 const rp = require('request-promise'),
-      fs = require('fs'),
       utils = require('../utils'),
       storage = require('../storage');
-
-const equip_data = JSON.parse(fs.readFileSync('./data/item.json').toString());
 
 /**
  * 遍历数据

@@ -1,6 +1,7 @@
 const freeHero = require('./freeHero'),
       hero = require('./hero'),
-      equip = require('./equip');
+      equip = require('./equip'),
+      ming = require('./ming');
 
 const spider = module.exports = {
 
@@ -17,6 +18,11 @@ const spider = module.exports = {
     /**
      * 获取局内装备
      */
-    equip
+    equip,
+
+    /**
+     * 获取铭文数据
+     */
+    ming
     
 }
