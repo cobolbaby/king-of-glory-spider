@@ -3,7 +3,7 @@ const rp = require('request-promise'),
       storage = require('../storage'),
       JsonData = require('./jsonData');
 
-const Ming = new JsonData(utils.getMingUrl(), 0, 2, 'ming');
+const Ming = new JsonData(utils.getMingUrl(), 80, 93, 'ming');
 
 function ming() {
     Ming.scraper();

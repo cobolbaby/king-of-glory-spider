@@ -55,7 +55,7 @@ class JsonData {
         if (this.endIndex > res.length) return;
 
         storage.init();
-        
+
         for (let i = this.startIndex; i < this.endIndex; i++) {
             const self = this;
             const item = res[i],
