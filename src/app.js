@@ -12,15 +12,15 @@ const schedule = require('node-schedule');
 const spider = require('./spider/index');
 
 // 每周一定时爬取并保存周免英雄
-schedule.scheduleJob('* * * * * 1', function(){
+// schedule.scheduleJob('* * * * * 1', function(){
     spider.freeHero();
-});
+// });
 
 // 爬取英雄详情信息
-// spider.hero(); 
+// spider.hero();
 
 // 爬取装备信息
-// spider.equip();
+// spider.equip(); 
 
 // 爬取铭文信息
 // spider.ming();
