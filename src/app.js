@@ -9,13 +9,15 @@ const schedule = require('node-schedule');
 'use strict';
 
 // 自定义模块
-const spider = require('./spider/index');
+const spider = require('./spider/index'),
+      term = require('./upload/terminology');
 
 // 每周一定时爬取并保存周免英雄
 schedule.scheduleJob('* * * * * 1', function(){
     spider.freeHero();
 });
 
+term();
 // 爬取英雄详情信息
 // spider.hero();
 
