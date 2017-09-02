@@ -1,6 +1,6 @@
 const rp = require('request-promise'),
-      utils = require('../utils'),
-      storage = require('../storage');
+    utils = require('../utils'),
+    storage = require('../storage');
 
 class JsonData {
     /**
@@ -14,7 +14,7 @@ class JsonData {
         this.url = url;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
-        
+
         switch (type) {
             case 'equip':
                 this.type = 'itemimg';
@@ -39,8 +39,7 @@ class JsonData {
         rp({
             url: self.url,
             json: true
-        })
-        .then(function(res) {
+        }).then(function(res) {
             self.loopData(res);
         });
     }
@@ -59,14 +58,14 @@ class JsonData {
         for (let i = this.startIndex; i < this.endIndex; i++) {
             const self = this;
             const item = res[i],
-                  id = item[`${this.prefix}_id`],
-                  img = `//game.gtimg.cn/images/yxzj/img201606/${this.type}/${id}.${this.picFormat}`;
+                id = item[`${this.prefix}_id`],
+                img = `//game.gtimg.cn/images/yxzj/img201606/${this.type}/${id}.${this.picFormat}`;
 
             item.img = img;
 
-            storage.saveOrUpdate({ 
-                key: `${self.prefix}_id`, 
-                val: id 
+            storage.saveOrUpdate({
+                key: `${self.prefix}_id`,
+                val: id
             }, self.className, item);
         }
     }

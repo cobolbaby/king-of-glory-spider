@@ -16,7 +16,7 @@ module.exports = {
      * 获取周免英雄数据源url
      */
     getFreeHeroUrl() {
-        return 'http://pvp.qq.com/webplat/info/news_version3/15592/24091/24992/m15707/index.shtml';
+        return 'http://pvp.qq.com/web201605/js/herolist.json';
     },
 
     /**
